@@ -1,0 +1,53 @@
+
+{% extends "base.html" %}
+
+{% block title %}About - TVISHA{% endblock %}
+
+{% block content %}
+
+<section class="about-page">
+  <div class="container">
+    <div class="about-page-header">
+      <span class="hero-tag">About Us</span>
+      <h1>Your Skincare Partner, Powered by AI</h1>
+      <p class="about-page-subtitle">
+        TVISHA was built to make skincare simple — no more guessing which products actually work for your skin.
+      </p>
+    </div>
+
+    <div class="about-content">
+      <div class="about-block">
+        <h3>What We Do</h3>
+        <p>
+          TVISHA uses an EfficientNet-B0 deep learning model to analyze photos of your skin
+          across 8 different conditions — from acne and redness to pigmentation and pores.
+          In seconds, you get a clear picture of your skin's current state.
+        </p>
+      </div>
+
+      <div class="about-block">
+        <h3>Personalized Recommendations</h3>
+        <p>
+          Once we know what your skin needs, we map those results to specific ingredients
+          proven to help — like Salicylic Acid for acne or Niacinamide for oil control —
+          along with real product suggestions to try.
+        </p>
+      </div>
+
+      <div class="about-block">
+        <h3>Why We Built This</h3>
+        <p>
+          Most people don't have access to a dermatologist for everyday skincare questions.
+          TVISHA bridges that gap with accessible, AI-powered analysis — so everyone can make
+          informed choices about their skin.
+        </p>
+      </div>
+    </div>
+
+    <div class="about-cta">
+      <a href="/#upload" class="hero-btn">Try TVISHA Now</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

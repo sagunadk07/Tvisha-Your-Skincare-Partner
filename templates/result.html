@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+{% endblock %}
+
+{% block title %}Your Results - TVISHA{% endblock %}
+
+{% block content %}
+
+<section class="result-section">
+  <div class="container">
+    <div class="result-header">
+      <h1>Your Skin Analysis</h1>
+      <p class="result-subtitle">Here's what our AI detected, along with personalized recommendations.</p>
+    </div>
+
+    <!-- Uploaded photo preview -->
+    <div class="result-photo-wrap">
+      <img id="analyzedPhoto" class="result-photo" alt="Your uploaded photo">
+    </div>
+
+    <!-- Skin Type -->
+    <div class="result-card">
+      <h3>Skin Type</h3>
+      <p id="skinType" class="skin-type-value">—</p>
+    </div>
+
+    <!-- Detected Issues -->
+    <div class="result-card">
+      <h3>Detected Issues</h3>
+      <div id="issuesList" class="tag-list"></div>
+    </div>
+
+    <!-- Recommended Ingredients -->
+    <div class="result-card">
+      <h3>Recommended Ingredients</h3>
+      <div id="ingredientsList" class="tag-list"></div>
+    </div>
+
+    <!-- Recommended Products -->
+    <div class="result-card">
+      <h3>Recommended Products</h3>
+      <div id="productsList" class="product-grid"></div>
+    </div>
+
+    <div class="result-actions">
+      <a href="/" class="hero-btn">Analyze Another Photo</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/result.js') }}"></script>
+{% endblock %}
