@@ -43,9 +43,10 @@
   <div class="container">
     <h2>Upload Your Skin Photo</h2>
     <p class="upload-subtitle">Use a clear, well-lit photo for the most accurate analysis.</p>
-
+<form action="/analyze" method="POST" enctype="multipart/form-data" id="uploadForm">
     <div class="upload-box" id="uploadBox">
-      <input type="file" id="fileInput" accept="image/*" hidden>
+         </form>
+     <input type="file" id="fileInput" name="skin_image" accept="image/*" hidden>
 
       <!-- Shown before a file is chosen -->
       <div class="upload-placeholder" id="uploadPlaceholder">
@@ -115,10 +116,3 @@
 
 </section>
 {% endblock %}
-<form action="/analyze" method="POST" enctype="multipart/form-data" id="uploadForm">
-  <div class="upload-box" id="uploadBox">
-    <input type="file" id="fileInput" name="skin_image" accept="image/*" hidden>
-    ...
-  </div>
-  <button type="submit" id="analyzeBtn" class="analyze-btn" disabled>Analyze Skin</button>
-</form>
