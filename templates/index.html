@@ -115,3 +115,10 @@
 
 </section>
 {% endblock %}
+<form action="/analyze" method="POST" enctype="multipart/form-data" id="uploadForm">
+  <div class="upload-box" id="uploadBox">
+    <input type="file" id="fileInput" name="skin_image" accept="image/*" hidden>
+    ...
+  </div>
+  <button type="submit" id="analyzeBtn" class="analyze-btn" disabled>Analyze Skin</button>
+</form>
