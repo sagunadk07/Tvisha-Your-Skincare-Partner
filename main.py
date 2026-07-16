@@ -1,7 +1,3 @@
-# This is the main Flask app. It defines every page ("route") of the website
-# and connects them to the face-checking code (face_validation.py) and the
-# AI model (model_inference.py).
-
 import argparse
 import base64
 import io
@@ -21,8 +17,6 @@ MODEL_PATH = "best_skin_model_8class.pth"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 MAX_UPLOAD_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 
-# Load the trained skin-condition model once, when the app starts, so we
-# don't have to reload it on every single upload (that would be slow).
 try:
     model = load_model(MODEL_PATH)
     print(f"Model loaded from {MODEL_PATH}")
@@ -78,8 +72,6 @@ def analyze():
         flash("Could not read that image. Please try a different file.")
         return redirect(url_for("scanner"))
 
-    # Make sure the photo shows exactly one straight-on face, and crop down
-    # to just the face before we run the skin-condition model on it.
     face_image, face_error = validate_and_crop_face(uploaded_image)
     if face_error:
         flash(face_error)
