@@ -43,27 +43,29 @@
   <div class="container">
     <h2>Upload Your Skin Photo</h2>
     <p class="upload-subtitle">Use a clear, well-lit photo for the most accurate analysis.</p>
-<form action="/analyze" method="POST" enctype="multipart/form-data" id="uploadForm">
-    <div class="upload-box" id="uploadBox">
-     <input type="file" id="fileInput" name="skin_image" accept="image/*" hidden>
 
-      <!-- Shown before a file is chosen -->
-      <div class="upload-placeholder" id="uploadPlaceholder">
-        <i class="bi bi-cloud-upload upload-icon"></i>
-        <p>Drag & drop your photo here, or <span class="browse-text">click to browse</span></p>
+    <form action="/analyze" method="POST" enctype="multipart/form-data" id="uploadForm">
+      <div class="upload-box" id="uploadBox">
+        <input type="file" id="fileInput" name="skin_image" accept="image/*" hidden>
+
+        <!-- Shown before a file is chosen -->
+        <div class="upload-placeholder" id="uploadPlaceholder">
+          <i class="bi bi-cloud-upload upload-icon"></i>
+          <p>Drag & drop your photo here, or <span class="browse-text">click to browse</span></p>
+        </div>
+
+        <!-- Shown after a file is chosen -->
+        <img id="previewImage" class="preview-image" hidden>
       </div>
 
-      <!-- Shown after a file is chosen -->
-      <img id="previewImage" class="preview-image" hidden>
-    </div>
+      <button type="submit" id="analyzeBtn" class="analyze-btn" disabled>Analyze Skin</button>
 
-    <button id="analyzeBtn" class="analyze-btn" disabled>Analyze Skin</button>
-
-    <!-- Shown while "processing" -->
-    <div id="loadingState" class="loading-state" hidden>
-      <div class="spinner"></div>
-      <p>Analyzing your skin...</p>
-    </div>
+      <!-- Shown while "processing" -->
+      <div id="loadingState" class="loading-state" hidden>
+        <div class="spinner"></div>
+        <p>Analyzing your skin...</p>
+      </div>
+    </form>
   </div>
 </section>
 
