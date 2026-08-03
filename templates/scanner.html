@@ -2,7 +2,7 @@
 
 {% block title %}Skin Scanner — Tvisha Skin{% endblock %}
 
-{% block extra_style %}
+{% block extra_css %}
 <style>
   .scan-wrap {
     min-height: calc(100vh - 68px);
@@ -171,6 +171,6 @@
 </div>
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_js %}
 <script src="{{ url_for('static', filename='js/scanner.js') }}"></script>
 {% endblock %}
