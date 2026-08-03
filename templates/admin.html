@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Admin - TVISHA{% endblock %}
+{% block content %}
+<section class="upload-section">
+  <div class="container">
+    <h2>Admin Dashboard</h2>
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Admin</th>
+          <th>Joined</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ "Yes" if user.is_admin else "No" }}</td>
+          <td>{{ user.created_at }}</td>
+          <td>
+            {% if user.id != session.user_id %}
+            <form method="POST" action="/admin/delete/{{ user.id }}" class="delete-user-form">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+document.querySelectorAll(".delete-user-form").forEach(function (form) {
+  form.addEventListener("submit", function (event) {
+    if (!confirm("Delete this user? This cannot be undone.")) {
+      event.preventDefault();
+    }
+  });
+});
+</script>
+{% endblock %}

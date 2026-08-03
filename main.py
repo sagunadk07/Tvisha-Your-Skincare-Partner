@@ -3,15 +3,18 @@ import base64
 import io
 import os
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from PIL import Image, UnidentifiedImageError
 
+from auth import init_db, create_user, verify_user, get_all_users, delete_user, is_user_admin, count_admins
 from face_validation import validate_and_crop_face
 from model_inference import load_model, predict, CLASS_NAMES, DISPLAY_NAMES, CONDITION_ICONS
 from recommendation_engine import get_recommendation
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "tvisha-dev-secret")
+
+init_db()
 
 MODEL_PATH = "best_skin_model_8class.pth"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
@@ -44,8 +47,101 @@ def scanner():
     return render_template("scanner.html")
 
 
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if len(username) < 3:
+            flash("Username must be at least 3 characters long.")
+            return redirect(url_for("signup"))
+        if len(password) < 6:
+            flash("Password must be at least 6 characters long.")
+            return redirect(url_for("signup"))
+        if password != confirm_password:
+            flash("Passwords do not match.")
+            return redirect(url_for("signup"))
+
+        if not create_user(username, password):
+            flash("That username is already taken. Please choose another.")
+            return redirect(url_for("signup"))
+
+        user = verify_user(username, password)
+        session["user_id"] = user["id"]
+        session["username"] = user["username"]
+        session["is_admin"] = user["is_admin"]
+        flash("Account created! You're now logged in.")
+        return redirect(url_for("index"))
+
+    return render_template("signup.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+
+        user = verify_user(username, password)
+        if user is None:
+            flash("Invalid username or password.")
+            return redirect(url_for("login"))
+
+        session["user_id"] = user["id"]
+        session["username"] = user["username"]
+        session["is_admin"] = user["is_admin"]
+        flash("Logged in successfully.")
+        return redirect(url_for("index"))
+
+    return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    session.pop("user_id", None)
+    session.pop("username", None)
+    session.pop("is_admin", None)
+    flash("You have been logged out.")
+    return redirect(url_for("index"))
+
+
+@app.route("/admin")
+def admin():
+    if "user_id" not in session or not session.get("is_admin"):
+        flash("You do not have permission to view that page.")
+        return redirect(url_for("index"))
+
+    users = get_all_users()
+    return render_template("admin.html", users=users)
+
+
+@app.route("/admin/delete/<int:user_id>", methods=["POST"])
+def admin_delete_user(user_id):
+    if "user_id" not in session or not session.get("is_admin"):
+        flash("You do not have permission to do that.")
+        return redirect(url_for("index"))
+
+    if user_id == session["user_id"]:
+        flash("You cannot delete your own account from this page.")
+        return redirect(url_for("admin"))
+
+    if is_user_admin(user_id) and count_admins() <= 1:
+        flash("Cannot delete the last remaining admin account.")
+        return redirect(url_for("admin"))
+
+    delete_user(user_id)
+    flash("User deleted.")
+    return redirect(url_for("admin"))
+
+
 @app.route("/analyze", methods=["POST"])
 def analyze():
+    if "user_id" not in session:
+        flash("Please log in to analyze your skin.")
+        return redirect(url_for("login"))
+
     if model is None:
         flash("Model not loaded. Place best_skin_model_8class.pth in the project root.")
         return redirect(url_for("scanner"))
@@ -96,6 +192,6 @@ def analyze():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--port", type=int, default=5000)
+    parser.add_argument("--port", type=int, default=5001)
     args = parser.parse_args()
     app.run(debug=True, port=args.port)

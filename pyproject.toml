@@ -1,0 +1,13 @@
+[project]
+name = "tvisha"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "flask>=3.0",
+    "torch>=2.0",
+    "torchvision>=0.15",
+    "timm>=1.0",
+    "pillow>=10.0",
+    "grad-cam>=1.5",
+    "opencv-python>=4.8,<5",
+]

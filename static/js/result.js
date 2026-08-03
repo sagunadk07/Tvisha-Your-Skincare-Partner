@@ -7,6 +7,21 @@ window.addEventListener('load', () => {
     document.querySelectorAll('.score-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
   }, 400);
 
+  const revealTargets = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && revealTargets.length) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealTargets.forEach(el => observer.observe(el));
+  } else {
+    revealTargets.forEach(el => el.classList.add('is-visible'));
+  }
+
   const viewport = document.getElementById('comp-viewport');
   if (!viewport) return;
 
@@ -21,6 +36,7 @@ window.addEventListener('load', () => {
     pct = Math.max(1, Math.min(99, pct));
     original.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
     handle.style.left = pct + '%';
+    viewport.setAttribute('aria-valuenow', Math.round(pct));
     if (!hintHidden && Math.abs(pct - 50) > 3) { hint.classList.add('hidden'); hintHidden = true; }
   }
 
@@ -30,4 +46,10 @@ window.addEventListener('load', () => {
   viewport.addEventListener('touchstart', e => { dragging = true; setPos(e.touches[0].clientX); }, { passive: true });
   document.addEventListener('touchmove', e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
   document.addEventListener('touchend', () => { dragging = false; });
+
+  viewport.addEventListener('keydown', e => {
+    const current = parseFloat(viewport.getAttribute('aria-valuenow')) || 50;
+    if (e.key === 'ArrowLeft') { setPos(viewport.getBoundingClientRect().left + viewport.getBoundingClientRect().width * (current - 5) / 100); e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { setPos(viewport.getBoundingClientRect().left + viewport.getBoundingClientRect().width * (current + 5) / 100); e.preventDefault(); }
+  });
 });
