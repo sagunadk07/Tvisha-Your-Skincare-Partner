@@ -47,17 +47,17 @@ templates/
   scanner.html, result.html,
   about.html, login.html,
   signup.html, admin.html    Jinja templates
-static/css/app.css           Design system used by result.html (cream/rose palette)
+static/css/app.css           Design system: cream/rose palette, nav/footer/buttons/cards
+static/css/app-forms.css     Container, form controls, and table styling on top of app.css
 best_skin_model_8class.pth   Trained model weights (required, see below)
 users.db                     SQLite user database (gitignored, created on first run)
 tests/                       pytest suite for face_validation.py and recommendation_engine.py
 ```
 
-> **Note:** `templates/index.html`, `scanner.html`, `about.html`, `login.html`,
-> `signup.html`, and `admin.html` all render against `base.html`'s Bootstrap-based
-> styling, while `result.html` alone has been migrated to the newer `app.css` design
-> system — the two haven't been unified yet, so the result page looks visually
-> different from the rest of the site.
+Every page shares the same design system (`app.css` + `app-forms.css`, included via
+`base.html`) — Bootstrap has been removed entirely. Each template adds page-specific
+layout in its own `{% block extra_css %}` (see `result.html`, `scanner.html`, or
+`index.html` for the pattern).
 
 ## Setup
 
