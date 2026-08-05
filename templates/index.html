@@ -1,5 +1,132 @@
 {% extends "base.html" %}
 {% block title %}Home - TVISHA{% endblock %}
+
+{% block extra_css %}
+<style>
+  .hero-section { padding: 4rem 0 3rem; }
+  .hero-content {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 1rem;
+  }
+  .hero-text h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    line-height: 1.15;
+    color: var(--deep);
+    margin: 0 0 1.2rem;
+  }
+  .hero-text h1 span { color: var(--rose); font-style: italic; }
+  .hero-text p { font-size: 0.95rem; line-height: 1.7; color: var(--muted); margin: 0 0 1.75rem; max-width: 480px; }
+  .hero-image { display: flex; justify-content: center; }
+  .hero-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    max-width: 420px;
+    border-radius: var(--r-xl);
+    background: linear-gradient(145deg, var(--cream), var(--blush));
+    border: 1px solid rgba(196,131,106,0.25);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .upload-subtitle { font-size: 0.85rem; color: var(--muted); margin: 0.4rem 0 1.75rem; }
+
+  .upload-box {
+    border: 2px dashed rgba(196,131,106,0.35);
+    border-radius: var(--r-lg);
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    background: var(--white);
+  }
+  .upload-box:hover, .upload-box.drag-over { border-color: var(--rose); background: rgba(196,131,106,0.05); }
+  .upload-icon { font-size: 2rem; display: block; margin-bottom: 0.75rem; }
+  .upload-placeholder p { font-size: 0.9rem; color: var(--muted); margin: 0; }
+  .browse-text { color: var(--rose); font-weight: 600; }
+  .preview-image { max-width: 100%; max-height: 320px; border-radius: var(--r); display: block; margin: 0 auto; }
+
+  .loading-state { text-align: center; margin-top: 1.25rem; }
+  .loading-state p { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 3px solid rgba(196,131,106,0.2);
+    border-top-color: var(--rose);
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #uploadForm .btn { margin-top: 1.5rem; width: 100%; }
+
+  .login-prompt {
+    text-align: center;
+    background: var(--white);
+    border: 1px solid rgba(196,131,106,0.15);
+    border-radius: var(--r-lg);
+    padding: 2.5rem 2rem;
+  }
+  .login-prompt p { color: var(--muted); font-size: 0.9rem; margin: 0 0 1.25rem; }
+  .login-prompt .btn { margin-bottom: 1rem; }
+
+  .how-it-works, .conditions { padding: 3rem 0; }
+  .how-it-works h2, .conditions h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 600;
+    color: var(--deep); text-align: center; margin: 0 0 2.5rem;
+  }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .step {
+    background: var(--white);
+    border: 1px solid rgba(196,131,106,0.12);
+    border-radius: var(--r-lg);
+    padding: 1.75rem;
+    text-align: center;
+  }
+  .step-number {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 600; color: var(--rose);
+    margin-bottom: 0.5rem;
+  }
+  .step h3 { font-size: 0.95rem; color: var(--deep); margin: 0 0 0.5rem; }
+  .step p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin: 0; }
+
+  .condition-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .condition-card {
+    background: var(--white);
+    border: 1px solid rgba(196,131,106,0.12);
+    border-radius: var(--r);
+    padding: 1rem 1.25rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--deep);
+  }
+
+  @media (max-width: 900px) {
+    .hero-content { grid-template-columns: 1fr; }
+    .hero-image { order: -1; }
+    .steps { grid-template-columns: 1fr; }
+    .condition-cards { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <!-- ==========================
@@ -22,7 +149,7 @@
           skin condition analysis along with personalized skincare
           recommendations.
         </p>
-        <a href="#upload" class="hero-btn">
+        <a href="#upload" class="btn btn-dark">
           Analyze Your Skin
         </a>
       </div>
@@ -39,9 +166,9 @@
 <!-- ==========================
      Upload Section
 ========================== -->
-<section class="upload-section" id="upload">
+<section id="upload" style="padding: 3rem 0;">
   <div class="container">
-    <h2>Upload Your Skin Photo</h2>
+    <h2 class="font-display" style="color: var(--deep);">Upload Your Skin Photo</h2>
     <p class="upload-subtitle">Use a clear, well-lit photo for the most accurate analysis.</p>
 
     {% if session.user_id %}
@@ -52,7 +179,7 @@
 
         <!-- Shown before a file is chosen -->
         <div class="upload-placeholder" id="uploadPlaceholder">
-          <i class="bi bi-cloud-upload upload-icon"></i>
+          <span class="upload-icon">🌸</span>
           <p>Drag & drop your photo here, or <span class="browse-text">click to browse</span></p>
         </div>
 
@@ -60,7 +187,7 @@
         <img id="previewImage" class="preview-image" hidden>
       </div>
 
-      <button type="submit" id="analyzeBtn" class="analyze-btn" disabled>Analyze Skin</button>
+      <button type="submit" id="analyzeBtn" class="btn btn-dark" disabled>Analyze Skin</button>
 
       <!-- Shown while "processing" -->
       <div id="loadingState" class="loading-state" hidden>
@@ -71,8 +198,8 @@
     {% else %}
     <div class="login-prompt">
       <p>You need an account to analyze your skin.</p>
-      <a href="/login" class="analyze-btn">Log In to Continue</a>
-      <p class="upload-subtitle">New here? <a href="/signup">Create one — it only takes a minute</a></p>
+      <a href="/login" class="btn btn-dark">Log In to Continue</a>
+      <p class="upload-subtitle">New here? <a href="/signup" style="color: var(--rose);">Create one — it only takes a minute</a></p>
     </div>
     {% endif %}
   </div>

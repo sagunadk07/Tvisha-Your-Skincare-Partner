@@ -1,7 +1,17 @@
 <nav class="site-nav">
   <a href="{{ url_for('index') }}" class="logo">Tvisha <span>Skin</span></a>
   <div class="nav-links">
+    <a href="{{ url_for('index') }}">Home</a>
     <a href="{{ url_for('scanner') }}">Skin Scanner</a>
     <a href="{{ url_for('about') }}">About</a>
+    {% if session.user_id %}
+      {% if session.is_admin %}
+        <a href="{{ url_for('admin') }}">Admin</a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}">Logout ({{ session.username }})</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('signup') }}">Sign Up</a>
+    {% endif %}
   </div>
 </nav>

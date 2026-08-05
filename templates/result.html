@@ -3,7 +3,6 @@
 {% block title %}Tvisha — Analysis Results{% endblock %}
 
 {% block extra_css %}
-<link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet" />
 <style>
   .page {
     max-width: 1100px;
@@ -232,8 +231,6 @@
 
   .comp-viewport:focus-visible { outline: 2px solid var(--rose); outline-offset: 2px; }
 
-  .result-page-footer { margin-top: -1rem; }
-
   @media (max-width: 900px) {
     .summary-card { grid-template-columns: 1fr; }
     .scores-grid { grid-template-columns: 1fr; }
@@ -390,10 +387,6 @@
 
   <p class="disclaimer">⚠ For informational purposes only — this is not a medical diagnosis. Consult a dermatologist for professional advice.</p>
 
-</div>
-
-<div class="result-page-footer">
-  {% include "_footer.html" %}
 </div>
 {% endblock %}
 
