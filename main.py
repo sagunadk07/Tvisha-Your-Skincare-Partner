@@ -2,6 +2,7 @@ import argparse
 import base64
 import io
 import os
+import secrets
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from PIL import Image, UnidentifiedImageError
@@ -12,7 +13,19 @@ from model_inference import load_model, predict, CLASS_NAMES, DISPLAY_NAMES, CON
 from recommendation_engine import get_recommendation
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "tvisha-dev-secret")
+
+app.secret_key = os.environ.get("SECRET_KEY")
+if not app.secret_key:
+    # No fixed fallback on purpose: a hardcoded secret in a public repo lets anyone forge a
+    # session cookie (including is_admin=True) without ever logging in. Generating a random
+    # key per run keeps local dev working with zero setup, at the cost of invalidating
+    # existing sessions on every restart - set SECRET_KEY to a persistent value in production.
+    app.secret_key = secrets.token_hex(32)
+    print(
+        "WARNING: SECRET_KEY environment variable not set. Using a random key generated "
+        "for this run only - all sessions will be invalidated on restart, and this must "
+        "NOT be relied on in production. Set SECRET_KEY before deploying."
+    )
 
 init_db()
 
