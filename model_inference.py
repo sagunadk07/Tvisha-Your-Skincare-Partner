@@ -96,11 +96,19 @@ def predict(model, image_bytes: bytes) -> dict:
          f"(resized to 224x224, normalized with ImageNet mean/std)")
 
     with torch.no_grad():
-        logits = model(tensor)
-        probs = torch.softmax(logits, dim=1)[0]
-    _log(f"STEP 3  Forward pass complete ({time.time() - start:.2f}s so far)")
+        probs_orig = torch.softmax(model(tensor), dim=1)[0]
+        # Test-time augmentation: also classify the horizontally-flipped photo and average the
+        # two probability distributions. Validated in dataset.ipynb (step 12) to give a small,
+        # free accuracy bump over a single forward pass. dim 3 = width, so this is a horizontal flip.
+        tensor_flipped = torch.flip(tensor, dims=[3])
+        probs_flipped = torch.softmax(model(tensor_flipped), dim=1)[0]
+        probs = (probs_orig + probs_flipped) / 2
+    _log(f"STEP 3  Forward pass complete, original + flipped averaged (TTA) ({time.time() - start:.2f}s so far)")
 
     idx = int(torch.argmax(probs).item())
+    orig_idx = int(torch.argmax(probs_orig).item())
+    if orig_idx != idx:
+        _log(f"        note: TTA changed the top prediction from '{CLASS_NAMES[orig_idx]}' to '{CLASS_NAMES[idx]}'")
 
     all_probs = sorted(
         [
@@ -115,14 +123,15 @@ def predict(model, image_bytes: bytes) -> dict:
         reverse=True,
     )
 
-    _log("STEP 4  Softmax confidence per class:")
+    _log("STEP 4  Softmax confidence per class (averaged across original + flipped):")
     for p in all_probs:
         marker = "*" if p["raw_label"] == CLASS_NAMES[idx] else " "
         _log(f"        {marker} {p['label']:<24} {p['confidence']:>5.1f}%")
 
     _log(f"STEP 5  Top prediction: {CLASS_NAMES[idx]} ({round(probs[idx].item() * 100, 1)}% confidence)")
 
-    _log("STEP 6  Generating Grad-CAM heatmap (needs gradients, so it runs outside no_grad)")
+    _log("STEP 6  Generating Grad-CAM heatmap on the original (non-flipped) photo, "
+         "for the TTA-averaged top class (needs gradients, so it runs outside no_grad)")
     gradcam_uri = _gradcam(model, img, tensor, idx)
     if gradcam_uri:
         _log(f"STEP 7  Grad-CAM heatmap ready - total elapsed {time.time() - start:.2f}s\n")
