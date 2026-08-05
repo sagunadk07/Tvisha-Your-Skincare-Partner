@@ -188,6 +188,12 @@ a { color: inherit; }
   margin-bottom: 1.25rem;
 }
 
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
 @media (max-width: 900px) {
   .site-nav { padding: 1rem 1.5rem; flex-wrap: wrap; }
   .nav-links { order: 3; width: 100%; justify-content: center; }

@@ -7,20 +7,7 @@ window.addEventListener('load', () => {
     document.querySelectorAll('.score-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
   }, 400);
 
-  const revealTargets = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window && revealTargets.length) {
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-    revealTargets.forEach(el => observer.observe(el));
-  } else {
-    revealTargets.forEach(el => el.classList.add('is-visible'));
-  }
+  // Scroll-reveal (.reveal/.is-visible) is now handled globally by main.js, loaded on every page.
 
   const viewport = document.getElementById('comp-viewport');
   if (!viewport) return;

@@ -30,17 +30,69 @@
   .hero-text h1 span { color: var(--rose); font-style: italic; }
   .hero-text p { font-size: 0.95rem; line-height: 1.7; color: var(--muted); margin: 0 0 1.75rem; max-width: 480px; }
   .hero-image { display: flex; justify-content: center; }
-  .hero-placeholder {
+  .hero-visual {
+    position: relative;
     width: 100%;
-    aspect-ratio: 4 / 3;
     max-width: 420px;
-    border-radius: var(--r-xl);
-    background: linear-gradient(145deg, var(--cream), var(--blush));
-    border: 1px solid rgba(196,131,106,0.25);
+    aspect-ratio: 4 / 3;
     display: flex; align-items: center; justify-content: center;
-    color: var(--muted);
-    font-size: 0.85rem;
   }
+  .hero-blob {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--cream), var(--blush));
+    border: 1px solid rgba(196,131,106,0.2);
+  }
+  .hero-blob--accent {
+    width: 190px; height: 190px;
+    top: 6%; right: 4%;
+    background: linear-gradient(145deg, var(--blush), rgba(196,131,106,0.3));
+  }
+  .hero-mock-card {
+    position: relative;
+    z-index: 2;
+    display: flex; align-items: center; gap: 0.85rem;
+    background: var(--white);
+    border-radius: var(--r-lg);
+    box-shadow: 0 20px 48px var(--shadow);
+    padding: 1.1rem 1.35rem;
+    max-width: 270px;
+  }
+  .hero-mock-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--cream), var(--blush));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+  }
+  .hero-mock-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0; }
+  .hero-mock-value { font-size: 0.88rem; font-weight: 700; color: var(--deep); margin: 0.15rem 0 0; }
+  .hero-mock-confidence {
+    margin-left: auto;
+    font-size: 0.7rem; font-weight: 700;
+    color: var(--green);
+    background: var(--green-light);
+    padding: 0.2rem 0.55rem;
+    border-radius: 20px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .hero-chip {
+    position: absolute;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 10px 24px var(--shadow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    animation: hero-float 4s ease-in-out infinite;
+  }
+  .hero-chip--1 { top: 4%; left: 6%; animation-delay: 0s; }
+  .hero-chip--2 { bottom: 12%; left: 0%; animation-delay: 1.3s; }
+  .hero-chip--3 { bottom: 2%; right: 8%; animation-delay: 2.6s; }
+  @keyframes hero-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @media (prefers-reduced-motion: reduce) { .hero-chip { animation: none; } }
 
   .upload-subtitle { font-size: 0.85rem; color: var(--muted); margin: 0.4rem 0 1.75rem; }
 
@@ -111,12 +163,15 @@
     background: var(--white);
     border: 1px solid rgba(196,131,106,0.12);
     border-radius: var(--r);
-    padding: 1rem 1.25rem;
+    padding: 1.1rem 1rem;
     text-align: center;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--deep);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
+  .condition-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px var(--shadow); }
+  .condition-icon { display: block; font-size: 1.4rem; margin-bottom: 0.5rem; }
 
   @media (max-width: 900px) {
     .hero-content { grid-template-columns: 1fr; }
@@ -155,8 +210,20 @@
       </div>
       <!-- Right Side -->
       <div class="hero-image">
-        <div class="hero-placeholder">
-          Hero Image
+        <div class="hero-visual">
+          <div class="hero-blob"></div>
+          <div class="hero-blob hero-blob--accent"></div>
+          <span class="hero-chip hero-chip--1">🎨</span>
+          <span class="hero-chip hero-chip--2">〰️</span>
+          <span class="hero-chip hero-chip--3">🔬</span>
+          <div class="hero-mock-card">
+            <div class="hero-mock-icon">🔥</div>
+            <div>
+              <p class="hero-mock-label">Detected</p>
+              <p class="hero-mock-value">Inflammatory Acne</p>
+            </div>
+            <span class="hero-mock-confidence">95%</span>
+          </div>
         </div>
       </div>
     </div>
@@ -166,7 +233,7 @@
 <!-- ==========================
      Upload Section
 ========================== -->
-<section id="upload" style="padding: 3rem 0;">
+<section id="upload" class="reveal" style="padding: 3rem 0;">
   <div class="container">
     <h2 class="font-display" style="color: var(--deep);">Upload Your Skin Photo</h2>
     <p class="upload-subtitle">Use a clear, well-lit photo for the most accurate analysis.</p>
@@ -208,7 +275,7 @@
 <!-- ==========================
      How It Works Section
 ========================== -->
-<section class="how-it-works" id="how-it-works">
+<section class="how-it-works reveal" id="how-it-works">
   <div class="container">
     <h2>How It Works</h2>
     <div class="steps">
@@ -234,18 +301,18 @@
 <!-- ==========================
      Skin Conditions Section
 ========================== -->
-<section class="conditions" id="conditions">
+<section class="conditions reveal" id="conditions">
   <div class="container">
     <h2>Skin Conditions We Detect</h2>
     <div class="condition-cards">
-      <div class="condition-card">Redness</div>
-      <div class="condition-card">Dark Spots</div>
-      <div class="condition-card">Wrinkles</div>
-      <div class="condition-card">Inflammatory Acne</div>
-      <div class="condition-card">Whiteheads</div>
-      <div class="condition-card">Blackheads</div>
-      <div class="condition-card">Pigmentation</div>
-      <div class="condition-card">Pores</div>
+      <div class="condition-card"><span class="condition-icon">🔴</span>Redness</div>
+      <div class="condition-card"><span class="condition-icon">🌑</span>Dark Spots</div>
+      <div class="condition-card"><span class="condition-icon">〰️</span>Wrinkles</div>
+      <div class="condition-card"><span class="condition-icon">🔥</span>Inflammatory Acne</div>
+      <div class="condition-card"><span class="condition-icon">⚪</span>Whiteheads</div>
+      <div class="condition-card"><span class="condition-icon">⚫</span>Blackheads</div>
+      <div class="condition-card"><span class="condition-icon">🎨</span>Pigmentation</div>
+      <div class="condition-card"><span class="condition-icon">🔬</span>Pores</div>
 
     </div>
   </div>

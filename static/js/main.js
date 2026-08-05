@@ -1,3 +1,20 @@
+// Scroll-reveal: fades/slides in any .reveal element as it enters the viewport.
+// Runs on every page (not just the ones with an upload form).
+const revealTargets = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window && revealTargets.length) {
+  const revealObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealTargets.forEach(el => revealObserver.observe(el));
+} else {
+  revealTargets.forEach(el => el.classList.add('is-visible'));
+}
+
 const uploadForm = document.getElementById('uploadForm');
 
 if (uploadForm) {
