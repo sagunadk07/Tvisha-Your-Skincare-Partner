@@ -5,6 +5,7 @@
   <div class="container" style="max-width: 420px;">
     <h2>Log In</h2>
     <form method="POST" action="/login">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>

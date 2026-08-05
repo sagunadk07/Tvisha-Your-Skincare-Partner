@@ -5,6 +5,7 @@ import os
 import secrets
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask_wtf import CSRFProtect
 from PIL import Image, UnidentifiedImageError
 
 from auth import init_db, create_user, verify_user, get_all_users, delete_user, is_user_admin, count_admins
@@ -26,6 +27,10 @@ if not app.secret_key:
         "for this run only - all sessions will be invalidated on restart, and this must "
         "NOT be relied on in production. Set SECRET_KEY before deploying."
     )
+
+# Protects every POST/PUT/PATCH/DELETE route in the app (login, signup, admin delete, and
+# /analyze) against CSRF - each form below carries a matching hidden csrf_token field.
+csrf = CSRFProtect(app)
 
 init_db()
 

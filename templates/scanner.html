@@ -146,6 +146,7 @@
     {% endwith %}
 
     <form action="{{ url_for('analyze') }}" method="POST" enctype="multipart/form-data" id="upload-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="drop-zone" id="drop-zone">
         <input type="file" name="skin_image" id="file-input" accept=".png,.jpg,.jpeg,.webp" />
         <span class="drop-icon">🌸</span>
