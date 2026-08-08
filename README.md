@@ -108,6 +108,12 @@ in the real recommendations CSV).
 | `/admin`                   | GET       | Admin-only: lists all users                        |
 | `/admin/delete/<user_id>`  | POST      | Admin-only: deletes a user (can't delete yourself or the last remaining admin) |
 
+## Team
+
+- **Sagun Adhikari** — backend, ML pipeline, security hardening
+- **Bindu Thapa** — dataset preparation and model training
+- **Sandhya Gurung** — frontend and UI design
+
 ## Disclaimer
 
 This tool is for informational purposes only and is not a medical diagnosis. Consult a
