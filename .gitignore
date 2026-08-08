@@ -6,3 +6,5 @@ __pycache__/
 *.log
 .claude/
 *.db
+*.pdf
+*.docx
